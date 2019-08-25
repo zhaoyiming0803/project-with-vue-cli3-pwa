@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title>project-with-vue-cli3-pwa</title>
+	</head>
+
+	<body>
+		<div id="app"></div>
+
+		<% if (htmlWebpackPlugin.options.var && htmlWebpackPlugin.options.var.isProd){ %>
+		<script>
+			window.addEventListener('load', e => {
+				if (!window.navigator.serviceWorker) {
+					return;
+        }
+        // sw 是相对于项目根目录的绝对路径
+				window.navigator.serviceWorker.register('/sw.js?v=201908021034', {scope: '/sns/sns_article_web/'})
+					.then(registration => {
+						console.log('Service Worker regist successfull', registration);
+					})
+					.catch(error => {
+						console.error('Service Worker regist failed', error);
+					});
+			});
+		</script>
+		<% } else { %>
+		<script src="https://cdn.bootcss.com/vue/2.5.2/vue.min.js"></script>
+		<script src="https://cdn.bootcss.com/vue-router/3.0.7/vue-router.min.js"></script>
+		<script>
+			window.addEventListener('load', e => {
+				if (!window.navigator.serviceWorker) {
+					return;
+				}
+				window.navigator.serviceWorker.register('/sw.js?v=201908271538', {scope: '/'})
+					.then(registration => {
+						console.log('Service Worker regist successfull', registration);
+					})
+					.catch(error => {
+						console.error('Service Worker regist failed', error);
+					});
+			});
+		</script>
+		<% } %>
+
+		<script defer src="https://pay.tf.qschou.com/pay/dist/pay.v1.0514.min.js"></script>
+
+		<% if (htmlWebpackPlugin.options.var && htmlWebpackPlugin.options.var.buildType && htmlWebpackPlugin.options.var.buildType !== 'master-build'){ %>
+		<script src="https://cdn.qingsongchou.com/fe-static/vconsole.min.js?v=3.3.0"></script>
+		<script>
+			// 初始化vConsole
+			new VConsole();
+		</script>
+		<% } %>
+	</body>
+</html>
